@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'projects.apps.ProjectsConfig' # 添加子应用，但不能添加在rest_framework后面
+    'projects.apps.ProjectsConfig', # 添加子应用，但不能添加在rest_framework后面
     'rest_framework'   #pip install djangprestframwork 安装后需要在此添加
 ]
 
