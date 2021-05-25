@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app.apps.AppConfig',
+    'projects.apps.ProjectsConfig' # 添加子应用，但不能添加在rest_framework后面
+    'rest_framework'   #pip install djangprestframwork 安装后需要在此添加
 ]
 
 MIDDLEWARE = [
@@ -49,7 +50,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-####asdsadasdsaasdasda
+
 ROOT_URLCONF = 'autoplatform.urls'
 
 TEMPLATES = [
@@ -79,9 +80,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'dev04',
         'HOST': 'localhost',
-        'PORT': 3306,
+        'PORT': "3306",
         'USER': 'root',
-        'PASSWORD': 111111
+        'PASSWORD': '111111'
     }
 }
 
