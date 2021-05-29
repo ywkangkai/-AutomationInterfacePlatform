@@ -49,7 +49,7 @@ class ProjectsSerializer(serializers.Serializer):
     # j.如果某个字段指定write_only=True，那么此字段只能进行反序列化输入，而不会输出（创建数据时必须得传，但是不返回）
     # k.可以给字段添加error_messages参数，为字典类型，字典的key为校验的参数名，值为校验失败之后错误提示
     tester = serializers.CharField(max_length=200, label='测试人员', help_text='测试人员', write_only=True,
-                                   error_messages={"required": "该字段必传1", "max_length": "长度不能操作200个字节"})
+                                   error_messages={"required": "该字段必传", "max_length": "长度不能操作200个字节"})
     # k.一个字段不同同时指定write_only=True, read_only=True
     # tester = serializers.CharField(max_length=200, label='测试人员', help_text='测试人员', write_only=True, read_only=True)
 
@@ -68,3 +68,24 @@ class ProjectsSerializer(serializers.Serializer):
         if len(value) != 8:
             raise serializers.ValidationError('测试人员姓名必须输入8位')
         return value
+
+    #############################################################
+
+    def create(self, validated_data):
+        #validated_data为校验通过之后的数据,必须返回对象
+        obj = Projects.objects.create(**validated_data)
+        return obj
+
+
+    def update(self, instance, validated_data):
+        # c.更新操作
+        print(validated_data)
+        instance.name = validated_data.get('name') or instance.name
+        instance.leader = validated_data.get('leader') or instance.leader
+        instance.tester = validated_data.get('tester') or instance.tester
+        instance.programmer = validated_data.get('programmer') or instance.programmer
+        instance.desc = validated_data.get('desc') or instance.desc
+        instance.save()
+
+        return instance
+
