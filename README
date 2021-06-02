@@ -1,0 +1,6 @@
+表与表之间的关系
+
+projects是项目表
+interfaces是接口表
+
+一个项目下可以有多个接口，1对多，其中interfaces表中的project字段是项目表的外键

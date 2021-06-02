@@ -11,7 +11,7 @@ from django.db.models import Q, Count
 
 from .models import Projects
 #from interfaces.models import Interfaces
-from .serializers import ProjectsSerializer
+from .serializers import ProjectsSerializer,ProjectsModelSerializer
 
 '''
 序列化器对象中几个重要的属性
@@ -23,22 +23,19 @@ from .serializers import ProjectsSerializer
 '''
 
 
-
-
-ret = {
-        "msg": "",
-        "code": 0
-}
 class ProjectsView(View):
 
     def get(self, request):
 
         qs = Projects.objects.all()
-        serializer_obj = ProjectsSerializer(instance=qs, many=True)
+        serializer_obj = ProjectsModelSerializer(instance=qs, many=True)
         return JsonResponse(serializer_obj.data, status=200, safe=False)
 
     def post(self, request):
-
+        ret = {
+            "msg": "",
+            "code": 0
+        }
         request_data = request.body
         try:
             python_data = json.loads(request_data)
@@ -62,7 +59,7 @@ class ProjectsView(View):
         在定义序列化器对象时，只给data传参
         使用序列化器对象.save(),会自动调用序列化器类中的create()方法
         '''
-        serializer_obj = ProjectsSerializer(data=python_data)
+        serializer_obj = ProjectsModelSerializer(data=python_data)
         try:
             serializer_obj.is_valid(raise_exception=True)
         except Exception as e:
@@ -79,6 +76,9 @@ class ProjectsView(View):
 
 class ProjectDetailView(View):
 
+    def get_object(self,pk=None):
+        pass
+
     def get(self, request, pk):
 
         try:
@@ -90,12 +90,15 @@ class ProjectDetailView(View):
             }
             return JsonResponse(result, status=400)
         print(obj.name)
-        serializer_obj = ProjectsSerializer(instance=obj)
+        serializer_obj = ProjectsModelSerializer(instance=obj)
         python_dict = serializer_obj.data
         return JsonResponse(python_dict)
 
     def put(self, request, pk):
-
+        ret = {
+            "msg": "",
+            "code": 0
+        }
         try:
             obj = Projects.objects.get(id=pk)
         except Exception as e:
@@ -121,7 +124,7 @@ class ProjectDetailView(View):
         如果在定义序列化器对象时，同时指定了instance和data参数，那么在调用序列化器对象的.save()方法时，会
         自动调用序列化器对象的update方法
         '''
-        serializer_obj = ProjectsSerializer(instance=obj, data=python_data)
+        serializer_obj = ProjectsModelSerializer(instance=obj, data=python_data)
         try:
             serializer_obj.is_valid(raise_exception=True)
         except Exception as e:
