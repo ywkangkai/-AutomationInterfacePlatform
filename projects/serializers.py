@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from projects.models import Projects
 from rest_framework import validators
+from interfaces.serializers import InterfacesModelSerializer
 '''
 自定义调用字段校验，value是前端传入的字段，如在name字段调用此函数，value=name，如果校验失败一定使用
 raise serializers.ValidationError
@@ -89,3 +90,33 @@ class ProjectsSerializer(serializers.Serializer):
 
         return instance
 
+
+
+'''
+使用模型序列化器类，简化序列化器类中字段的创建
+需要继承ModelSerializer，但是不需要在重写create和update方法，调用.save()方法后可以直接调用create与update方法
+'''
+class ProjectsModelSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(max_length=10, label='项目名称', help_text='项目名称', min_length=2,
+                                 validators=[validators.UniqueValidator(Projects.objects.all(), message='项目已存在',
+                                                                        ), is_name_contain_x, is_name_contain_y])
+    #email = serializers.EmailField() #可以添加模型类中没有的字段，但必须要写入到fields中，场景：验证码，需要校验，但无需校验字段
+
+    #此处的interfaces是在接口表interfaces中的project字段中有一个related_name=interfaces属性，如果这个属性等于其他值就需要跟着变化
+    interfaces = InterfacesModelSerializer(many=True)
+    #interfaces = serializers.StringRelatedField() 这个属性是返回接口表interfaces中   def __str__(self):
+    class Meta:
+        #需要在Meta内部类这两个指定model类属性，需要按照哪一个模型来创建
+        #默认id主键，会添加read_only=True
+        #create_time和update_time，会添加read_only=True
+        model = Projects
+        fields = '__all__'  #fileds类属性来指定模型类中哪些字段需要输入或输出
+        #fields = ('id','name','leader','tester','interfaces')#可以将需要输入或输出的字段，在元组中指定
+        #exclude = ('desc',)#把需要排除的字段放在exclude
+        read_only_fields = ('id','desc') #这些字段只输出不输入
+
+
+    #添加了email字段，但是该字段不在表中，所以在创建数据时需要先将该字段剔除
+    # def create(self, validated_data):
+    #     email = validated_data.pop("email")
+    #     return Projects.objects.create(**validated_data)
