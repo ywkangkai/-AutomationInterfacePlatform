@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'projects.apps.ProjectsConfig', # 添加子应用，但不能添加在rest_framework后面
     'interfaces.apps.InterfacesConfig',# 添加子应用，但不能添加在rest_framework后面
+    'django_filters',
     'rest_framework'   #pip install djangprestframwork 安装后需要在此添加
 ]
 
@@ -125,3 +126,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+REST_FRAMEWORK = {
+    'NON_FIELD_ERRORS_KEY':'errors',
+    #指定全局的过滤引擎
+    'DEFAULT_FILTER_BACKENDS':['django_filters.rest_framework.backends.DjangoFilterBackend'],
+    #指定分页引擎
+   # 'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
+
+    'DEFAULT_PAGINATION_CLASS':'utils.pagination.MyPagination',
+    #必须指定每页每页的数据条数
+    #'PAGE_SIZE':3,
+}
