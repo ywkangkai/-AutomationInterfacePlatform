@@ -13,8 +13,29 @@ from .serializers import ProjectsModelSerializer
 from django_filters.rest_framework import DjangoFilterBackend  #pip install django_filters
 from rest_framework.filters import OrderingFilter #指定排序引擎
 
+'''
+1.ModelViewSet他继承了mixins中的增删查改与GenericViewSet，
+    class ModelViewSet(mixins.CreateModelMixin,
+                       mixins.RetrieveModelMixin,
+                       mixins.UpdateModelMixin,
+                       mixins.DestroyModelMixin,
+                       mixins.ListModelMixin,
+                       GenericViewSet):
+                   
+2.根据URL中的映射关系实现了自动调用增删查改对应的接口方法
+
+3.搞清GenericViewSet的作用（分页，过滤），搞清mixins简化增删查改的写法
+
+搞清几个概念：
+    get—list：就是在做查询，这里查询大量数据对他们进行分页（要分页前提就需要GenericViewSet中的queryset与serializer_class），mixins.ListModelMixin下有一个list方法
+    get—retrieve：也是查询，但是是查看单条数据详情，mixins.RetrieveModelMixin下有一个retrieve方法
+    post—create：创建数据接口，mixins.CreateModelMixin下有一个create方法
+    put—update：修改接口，mixins.UpdateModelMixin下有一个update方法
+    delete—destroy，删除接口，mixins.DestroyModelMixin下有一个destroy
+'''
 
 class ProjectViewSet(viewsets.ModelViewSet):
+
     queryset = Projects.objects.all()  # 需要指定queryset，当前接口中需要使用到的查询集
     serializer_class = ProjectsModelSerializer  # 需要指定serializer_class，当前接口中需要使用到的序列化器类
     filter_backends = [DjangoFilterBackend, OrderingFilter]  # DRF框架中的过滤引擎，有它才能对下面字段进行过滤
