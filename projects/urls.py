@@ -8,14 +8,19 @@ from projects import views
 使用映射关系，根据不通的路径去找不通的方法
 '''
 urlpatterns = [
-    path('projects/', views.ProjectViewSet.as_view({
+    path('projects/', views.ProjectsViewSet.as_view({
         'get': 'list',
         'post': 'create'
     })),
-    path('projects/<int:pk>/', views.ProjectViewSet.as_view({
+    path('projects/names', views.ProjectsViewSet.as_view({
+        'get': 'names',
+    })),
+    path('projects/<int:pk>/', views.ProjectsViewSet.as_view({
         'get': 'retrieve',
         'put': 'update',
         'delete': 'destroy'
     })),
-
+    path('projects/<int:pk>/interfaces', views.ProjectsViewSet.as_view({
+        'get': 'interfaces',
+    })),
 ]
