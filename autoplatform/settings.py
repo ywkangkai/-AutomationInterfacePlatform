@@ -138,4 +138,58 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS':'utils.pagination.MyPagination',
     #必须指定每页每页的数据条数
     #'PAGE_SIZE':3,
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+}
+
+# 可以在全局配置settings.py中的LOGGING，来配置日志信息
+LOGGING = {
+    # 版本号
+    'version': 1,
+    # 指定是否禁用已经存在的日志器
+    'disable_existing_loggers': False,
+    # 日志的显示格式
+    'formatters': {
+        # simple为简化版格式的日志
+        'simple': {
+            'format': '%(asctime)s - [%(levelname)s] - [msg]%(message)s'
+        },
+        # verbose为详细格式的日志
+        'verbose': {
+            'format': '%(asctime)s - [%(levelname)s] - %(name)s - [msg]%(message)s - [%(filename)s:%(lineno)d ]'
+        },
+    },
+    # filters指定日志过滤器
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    # handlers指定日志输出渠道
+    'handlers': {
+        # console指定输出到控制台
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        # 日志保存到日志文件
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            # 指定存放日志文件的所处路径
+            'filename': os.path.join(BASE_DIR, "logs/test.log"),  # 日志文件的位置
+            'maxBytes': 100 * 1024 * 1024,
+            'backupCount': 10,
+            'formatter': 'verbose'
+        },
+    },
+    # 定义日志器
+    'loggers': {
+        'log': {  # 定义了一个名为mytest的日志器
+            'handlers': ['console', 'file'],
+            'propagate': True,
+            'level': 'DEBUG',  # 日志器接收的最低日志级别
+        },
+    }
 }

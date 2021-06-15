@@ -1,4 +1,4 @@
-import json
+import logging
 from django.http import HttpResponse, JsonResponse
 from django.views import View
 from django.shortcuts import render  # 用于返回html页面 重定向
@@ -10,7 +10,7 @@ from .models import Projects
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response  # 需要结合APIview使用
-from .serializers import ProjectsModelSerializer, ProjectsNameModelSerializer, InterfacesByProjectsNameModelSerializer
+from .serializers import ProjectsModelSerializer, InterfacesByProjectsNameModelSerializer,ProjectsNamesModelSerializer
 from django_filters.rest_framework import DjangoFilterBackend  # pip install django_filters
 from rest_framework.filters import OrderingFilter  # 指定排序引擎
 
@@ -35,6 +35,7 @@ from rest_framework.filters import OrderingFilter  # 指定排序引擎
     delete—destroy，删除接口，mixins.DestroyModelMixin下有一个destroy
 '''
 
+logger = logging.getLogger('log')  #这里的log是setting中189行自己定义的名字
 
 class ProjectsViewSet(viewsets.ModelViewSet):
     queryset = Projects.objects.all()  # 需要指定queryset，当前接口中需要使用到的查询集
@@ -46,14 +47,25 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     # 重写父类的get_serializer_class
     def get_serializer_class(self):
         if self.action == 'names':
-            return ProjectsNameModelSerializer
+            return ProjectsNamesModelSerializer
         elif self.action == 'interfaces':
             return InterfacesByProjectsNameModelSerializer
         else:
             return self.serializer_class()
 
+    '''
+    使用action的目的是可以对原来的一些接口实现重新自定义的一些需求
+    '''
     @action(methods=['get'], detail=False)  # 看url中对应的用法，需要指定什么方法，detail表示是查多个还是查一个数据
     def names(self, request):
+        qs = self.get_queryset()
+        qs = self.filter_queryset(qs)
+        page = self.paginate_queryset(qs)
+        if page is not None:
+            serializer_obj = self.get_serializer(instance=page, many=True)
+            data = serializer_obj.data
+            logger.debug(data)  #收集日志
+            return Response(data)
         serializer_obj = self.get_serializer(instance=self.get_queryset(), many=True)
         return Response(serializer_obj.data)
 

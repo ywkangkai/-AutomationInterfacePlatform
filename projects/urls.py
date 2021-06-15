@@ -2,6 +2,7 @@ from django.urls import path, re_path
 
 # from projects.views import
 from projects import views
+from rest_framework.routers import DefaultRouter,SimpleRouter
 
 '''
 需要集成ViewSet才能使用这种写法，
@@ -12,7 +13,7 @@ urlpatterns = [
         'get': 'list',
         'post': 'create'
     })),
-    path('projects/names', views.ProjectsViewSet.as_view({
+    path('projects/names/', views.ProjectsViewSet.as_view({
         'get': 'names',
     })),
     path('projects/<int:pk>/', views.ProjectsViewSet.as_view({
@@ -20,7 +21,7 @@ urlpatterns = [
         'put': 'update',
         'delete': 'destroy'
     })),
-    path('projects/<int:pk>/interfaces', views.ProjectsViewSet.as_view({
+    path('projects/<int:pk>/interfaces/', views.ProjectsViewSet.as_view({
         'get': 'interfaces',
     })),
 ]

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from projects.models import Projects
 from rest_framework import validators
-
+from interfaces.models import Interfaces
 from interfaces.serializers import InterfacesModelSerializer
 import locale
 '''
@@ -133,3 +133,24 @@ class ProjectsModelSerializer(serializers.ModelSerializer):
     # def create(self, validated_data):
     #     email = validated_data.pop("email")
     #     return Projects.objects.create(**validated_data)
+
+class ProjectsNamesModelSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Projects
+        fields = ('id','name')
+
+
+class InterfacesNamesModelSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Interfaces
+        fields = ('id','name')
+
+
+class InterfacesByProjectsNameModelSerializer(serializers.ModelSerializer):
+
+    interfaces = InterfacesNamesModelSerializer(many=True, read_only=True)
+    class Meta:
+        model = Projects
+        fields = ('interfaces',)

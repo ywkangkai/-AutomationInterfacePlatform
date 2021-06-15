@@ -1,0 +1,9 @@
+self.get_queryset() 相当于 model.object.all()
+
+self.filter_queryset('参数') 相当于model.objects.filter()
+
+self.get_serializer()相当于 指定一个序列化类
+
+self.get_object()相当于model.object.get(id=pk)
+
+self.paginate_queryset() 在调用分页的功能，使用自己重写的类

@@ -2,7 +2,7 @@ from rest_framework.pagination import PageNumberPagination
 
 class MyPagination(PageNumberPagination):
 
-    page_size = 1  #修改每页显示的条数
+    page_size = 3  #修改每页显示的条数
 
     page_query_param = 'p'  #查看第N页的数据 http://IP?p=n
 
