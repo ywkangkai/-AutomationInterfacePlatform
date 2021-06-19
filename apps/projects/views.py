@@ -51,7 +51,7 @@ class ProjectsViewSet(viewsets.ModelViewSet):
         elif self.action == 'interfaces':
             return InterfacesByProjectsNameModelSerializer
         else:
-            return self.serializer_class()
+            return self.serializer_class
 
     '''
     使用action的目的是可以对原来的一些接口实现重新自定义的一些需求

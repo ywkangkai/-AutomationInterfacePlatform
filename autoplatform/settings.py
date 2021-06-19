@@ -11,10 +11,11 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-
+import sys
+import datetime
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+sys.path.append(os.path.join(BASE_DIR,'apps'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'projects.apps.ProjectsConfig', # 添加子应用，但不能添加在rest_framework后面
     'interfaces.apps.InterfacesConfig',# 添加子应用，但不能添加在rest_framework后面
+    'user.apps.UserConfig',
     'django_filters',
     'rest_framework'   #pip install djangprestframwork 安装后需要在此添加
 ]
@@ -139,6 +141,15 @@ REST_FRAMEWORK = {
     #必须指定每页每页的数据条数
     #'PAGE_SIZE':3,
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    # DEFAULT_AUTHENTICATION_CLASSES指定默认的认证类（认证方式）
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 会话认证
+        'rest_framework.authentication.SessionAuthentication',
+        # 基本认证（用户名和密码认证）
+        'rest_framework.authentication.BasicAuthentication',
+        #指定使用JWT token认证
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication'
+    ],
 }
 
 # 可以在全局配置settings.py中的LOGGING，来配置日志信息
@@ -192,4 +203,14 @@ LOGGING = {
             'level': 'DEBUG',  # 日志器接收的最低日志级别
         },
     }
+}
+
+
+'''
+前段用户访问认证之后的接口，需要在请求头携带参数：
+Authorization为key，值为JWT + 空格 + token值，如 Authorization: JWT xxxxxxxxxxxxxxx
+'''
+JWT_AUTH = {
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'utils.jwt_handle.jwt_response_payload_handler',
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1) #  指定token过期时间
 }

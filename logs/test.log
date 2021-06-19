@@ -1,0 +1,3 @@
+2021-06-16 21:00:00,320 - [DEBUG] - log - [msg][OrderedDict([('id', 1), ('name', '老1王')]), OrderedDict([('id', 2), ('name', 'xxx')]), OrderedDict([('id', 3), ('name', '21')])] - [views.py:67 ]
+2021-06-16 21:43:43,945 - [DEBUG] - log - [msg][OrderedDict([('id', 1), ('name', '老1王')]), OrderedDict([('id', 2), ('name', 'xxx')]), OrderedDict([('id', 3), ('name', '21')])] - [views.py:67 ]
+2021-06-16 21:46:41,627 - [DEBUG] - log - [msg][OrderedDict([('id', 1), ('name', '老1王')]), OrderedDict([('id', 2), ('name', 'xxx')]), OrderedDict([('id', 3), ('name', '21')])] - [views.py:67 ]

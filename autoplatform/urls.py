@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('projects.urls')),
     path('docs/', include_docs_urls(title="测试平台接口文档")),
-    path('', include('interfaces.urls'))
+    path('', include('interfaces.urls')),
+    path('user/', include('user.urls'))
 ]
