@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',  #解决跨域的问题，前端项目启动后需要跨域请求前后端需要填写一样地址和端口，尽量放到第一个
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware', #解决跨域问题，需要放在django.contrib.sessions.middleware.SessionMiddleware的上面
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     #'django.middleware.csrf.CsrfViewMiddleware',
@@ -54,6 +56,20 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+#添加白名单
+#CORS_ORIGIN_ALLOW_ALL = True,表示所有域名(ip)都可以访问后端接口，默认为false
+CORS_ORIGIN_ALLOW_ALL = True
+
+
+'''
+CORS_ORIGIN_WHITELIST表示指定能够访问后端接口的ip或域名列表
+'''
+# CORS_ORIGIN_WHITELIST = [
+#     'http://127.0.0.1:8080',
+#     'http://192.168.1.63:8080'
+# ]
+
 
 ROOT_URLCONF = 'autoplatform.urls'
 

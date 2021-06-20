@@ -1,6 +1,25 @@
-表与表之间的关系
+启动前端项目：
 
-projects是项目表
-interfaces是接口表
+1、安装nodejs
+安装《软件安装包》目录下的 node-v12.18.2-x64.msi
 
-一个项目下可以有多个接口，1对多，其中interfaces表中的project字段是项目表的外键
+2、安装淘宝cnpm
+https://developer.aliyun.com/mirror/NPM
+
+执行如下命令：
+npm install -g cnpm --registry=https://registry.npm.taobao.org
+安装cnpm后执行cnpm install
+
+3、如果安装过程中报如下错：
+To install it, you can run: cnpm install --save vue-runtime-helpers
+执行如下命令：
+#npm install --save vue-runtime-helpers
+cnpm install --save vue-runtime-helpers
+
+
+4、启动项目
+打开terminal，执行如下命令：
+npm run serve
+
+
+5、项目启动后进入前端的src/api/api.js文件中，将let host的地址修改为你后端地址

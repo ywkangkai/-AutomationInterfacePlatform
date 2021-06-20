@@ -1,0 +1,59 @@
+一、如何使用序列化器？
+1.如果仅仅只涉及到数据的校验
+a.创建序列化器类
+b.创建序列化对象
+    序列化器类(data=字典)
+c.开始进行校验：序列化对象.is_valid()
+d.获取错误信息：序列化对象.errors
+e.获取校验成功之后的值：序列化对象.data、序列化对象.validated_data
+
+2.如果仅仅获取数据库中的数据
+a.创建序列化器类
+b.创建序列化对象
+    序列化器类(instance=模型对象)
+    序列化器类(instance=查询集对象, many=True)
+    序列化器类(instance=普通对象)
+c.序列化输出：序列化对象.data
+
+3.既需要做数据校验也需要修改数据库中的数据
+a.创建序列化器类
+b.创建序列化对象
+    序列化器类(instance=模型对象, data=字典)
+    序列化器类(data=字典)
+c.开始进行校验：序列化对象.is_valid()
+d.获取错误信息：序列化对象.errors
+e.获取校验成功之后对数据进行修改
+    没有给instance传参：给序列化对象.save()  -> .create()
+    有给instance传参：序列化对象.save()  -> .update()
+f.序列化输出：序列化对象.data
+
+
+二、如何实现接口自动化测试
+1、流程
+a.需求分析
+b.测试计划
+c.用例设计（接口自动化测试用例）
+d.创建自动化测试框架（）
+e.执行用例
+f.测试报告
+g.持续集成
+
+2、自动化测试框架设计
+a.测试数据放在哪里？
+    excel、数据库、json、yaml
+b.怎么实现断言？
+    unittest、pytest、junit、testng
+c.怎样实现数据驱动？
+    ddt
+d.怎么实现数据校验？
+    通过python执行sql语句，pymysql模块
+e.怎么实现接口依赖？
+    动态属性机制去处理
+f.怎么实现参数化实现？
+    使用正则表达式去实现
+g.怎么去处理日志、配置、测试报告？
+    logging、yaml/configparse
+
+
+httprunner：
+    unittest、yaml、logging、自定义函数、locust
