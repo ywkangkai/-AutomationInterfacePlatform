@@ -57,17 +57,9 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     使用action的目的是可以对原来的一些接口实现重新自定义的一些需求
     '''
     @action(methods=['get'], detail=False)  # 看url中对应的用法，需要指定什么方法，detail表示是查多个还是查一个数据
-    def names(self, request):
-        qs = self.get_queryset()
-        qs = self.filter_queryset(qs)
-        page = self.paginate_queryset(qs)
-        if page is not None:
-            serializer_obj = self.get_serializer(instance=page, many=True)
-            data = serializer_obj.data
-            logger.debug(data)  #收集日志
-            return Response(data)
-        serializer_obj = self.get_serializer(instance=self.get_queryset(), many=True)
-        return Response(serializer_obj.data)
+    def names(self, request,*args, **kwargs):
+        logger.debug(request.data)
+        return self.list(request,*args, **kwargs)
 
     @action(detail=True)
     def interfaces(self,request,*args,**kwargs):

@@ -123,11 +123,15 @@ class ProjectsModelSerializer(serializers.ModelSerializer):
         #默认id主键，会添加read_only=True
         #create_time和update_time，会添加read_only=True
         model = Projects
-        fields = '__all__'  #fileds类属性来指定模型类中哪些字段需要输入或输出
+        #fields = '__all__'  #fileds类属性来指定模型类中哪些字段需要输入或输出
         #fields = ('id','name','leader','tester','interfaces')#可以将需要输入或输出的字段，在元组中指定
-        #exclude = ('desc',)#把需要排除的字段放在exclude
-        read_only_fields = ('id','desc') #这些字段只输出不输入
-
+        exclude = ('update_time',)#把不需要输入和输出的字段排除
+        #read_only_fields = ('id','desc') #这些字段只输出不输入
+        extra_kwargs = {
+              'create_time':{
+                  'read_only':False
+              }
+        }
 
     #添加了email字段，但是该字段不在表中，所以在创建数据时需要先将该字段剔除
     # def create(self, validated_data):
