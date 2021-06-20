@@ -6,6 +6,7 @@ from django.db.models import Q, Count  # 组合查询
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 from rest_framework import mixins
+from interfaces.models import Interfaces
 from .models import Projects
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -44,6 +45,23 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     filterset_fields = ['name', 'leader']  # 可根据这些字段进行过滤，任意添加模型类中的字段
     ordering_fields = ['name', 'leader', 'id']  # 可根据这些字段进行排序，任意添加模型类中的字段
 
+
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        results = response.data['results']
+        for item in results:
+            project_id = item.get("id")
+            '''
+            a.使用.annotate()方法，那么会自动使用当前模型类的主键作为分组条件
+            b.使用.annotate()方法里可以添加聚合函数，计算的名称为一般从表模型类名小写（还需要在外键字段上设置related_name）
+            c.values可以指定需要查询的字段（默认为所用字段）
+            d.可以给聚合函数指定别名，默认为testcases__count,这里的别名为testcases1
+            '''
+            interfaces_obj = Interfaces.objects.annotate(testcases1=Count('testcases')).values('id','testcases1').filter(
+                                                                                                            project_id=project_id
+                                                                                                                        )
+        return response
+
     # 重写父类的get_serializer_class
     def get_serializer_class(self):
         if self.action == 'names':
@@ -58,7 +76,7 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     '''
     @action(methods=['get'], detail=False)  # 看url中对应的用法，需要指定什么方法，detail表示是查多个还是查一个数据
     def names(self, request,*args, **kwargs):
-        logger.debug(request.data)
+
         return self.list(request,*args, **kwargs)
 
     @action(detail=True)

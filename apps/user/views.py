@@ -1,16 +1,19 @@
 from django.shortcuts import render
-from user.serializers import UserModelSerializer
+from user.serializers import RegisterSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.models import User
+from rest_framework.generics import CreateAPIView
 
-class UserView(APIView):
+class UserView(CreateAPIView):
 
-    def post(self,request):
-        serializer_job = UserModelSerializer(data=request.data)
-        serializer_job.is_valid(raise_exception=True)
-        serializer_job.save()
-        return Response(serializer_job.data)
+    # def post(self,request):   这是继承APIView的写法
+    #     serializer_job = RegisterSerializer(data=request.data)
+    #     serializer_job.is_valid(raise_exception=True)
+    #     serializer_job.save()
+    #     return Response(serializer_job.data)
+
+    serializer_class = RegisterSerializer   #CreateAPIView会自动调用create方法，相当于上面的逻辑
 
 
 

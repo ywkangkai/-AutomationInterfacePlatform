@@ -3,7 +3,7 @@ from rest_framework import validators
 from django.contrib.auth.models import User  # 这个user表示django内置提供
 from rest_framework_jwt.serializers import jwt_payload_handler,jwt_encode_handler
 
-class UserModelSerializer(serializers.ModelSerializer):
+class RegisterSerializer(serializers.ModelSerializer):
     username = serializers.CharField(
         label='用户名',
         max_length=20,

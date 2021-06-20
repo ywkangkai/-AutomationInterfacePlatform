@@ -3,7 +3,7 @@ from projects.models import Projects
 from rest_framework import validators
 from interfaces.models import Interfaces
 from interfaces.serializers import InterfacesModelSerializer
-import locale
+from utils.format_time import datetimes_fmt
 '''
 自定义调用字段校验，value是前端传入的字段，如在name字段调用此函数，value=name，如果校验失败一定使用
 raise serializers.ValidationError
@@ -111,10 +111,6 @@ class ProjectsModelSerializer(serializers.ModelSerializer):
                                  validators=[validators.UniqueValidator(Projects.objects.all(), message='项目已存在',
                                                                         ), is_name_contain_x, is_name_contain_y])
     #email = serializers.EmailField() #可以添加模型类中没有的字段，但必须要写入到fields中，场景：验证码，需要校验，但无需校验字段
-
-    locale.setlocale(locale.LC_CTYPE, 'chinese')  #作用是在设置时间的时候存在中文，如果不是utf-8会报错，这样是设置为简体中文
-    datatime_fmt = '%Y年%m月%d %H:%M:%S'
-    update_time = serializers.DateTimeField(label='更新时间', help_text='更新时间',format=datatime_fmt,read_only=True)
     #此处的interfaces是在接口表interfaces中的project字段中有一个related_name=interfaces属性，如果这个属性等于其他值就需要跟着变化，如果没有related_name这个属性需要写为interfaces_set
     interfaces = InterfacesModelSerializer(many=True,read_only=True)
     #interfaces = serializers.StringRelatedField() 这个属性是返回接口表interfaces中   def __str__(self):
@@ -129,7 +125,8 @@ class ProjectsModelSerializer(serializers.ModelSerializer):
         #read_only_fields = ('id','desc') #这些字段只输出不输入
         extra_kwargs = {
               'create_time':{
-                  'read_only':False
+                  'read_only':False,
+                  'format': datetimes_fmt(),
               }
         }
 
