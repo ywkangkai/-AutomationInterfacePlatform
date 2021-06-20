@@ -14,20 +14,19 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Interfaces',
+            name='DebugTalks',
             fields=[
                 ('create_time', models.DateTimeField(auto_now_add=True, help_text='创建时间', verbose_name='创建时间')),
                 ('update_time', models.DateTimeField(auto_now=True, help_text='更新时间', verbose_name='更新时间')),
                 ('id', models.AutoField(help_text='id主键', primary_key=True, serialize=False, verbose_name='id主键')),
-                ('name', models.CharField(help_text='接口名称', max_length=200, unique=True, verbose_name='接口名称')),
-                ('tester', models.CharField(help_text='测试人员', max_length=50, verbose_name='测试人员')),
-                ('desc', models.CharField(blank=True, help_text='简要描述', max_length=200, null=True, verbose_name='简要描述')),
-                ('project', models.ForeignKey(help_text='所属项目', on_delete=django.db.models.deletion.CASCADE, related_name='interfaces', to='projects.Projects')),
+                ('name', models.CharField(default='debugtalk.py', help_text='debugtalk文件名称', max_length=200, verbose_name='debugtalk文件名称')),
+                ('debugtalk', models.TextField(default='#debugtalk.py', help_text='debugtalk.py文件', null=True)),
+                ('project', models.OneToOneField(help_text='所属项目', on_delete=django.db.models.deletion.CASCADE, related_name='debugtalks', to='projects.Projects')),
             ],
             options={
-                'verbose_name': '接口信息',
-                'verbose_name_plural': '接口信息',
-                'db_table': 'tb_interfaces',
+                'verbose_name': 'debugtalk.py文件',
+                'verbose_name_plural': 'debugtalk.py文件',
+                'db_table': 'tb_debugtalks',
             },
         ),
     ]

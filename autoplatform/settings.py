@@ -42,6 +42,12 @@ INSTALLED_APPS = [
     'projects.apps.ProjectsConfig', # 添加子应用，但不能添加在rest_framework后面
     'interfaces.apps.InterfacesConfig',# 添加子应用，但不能添加在rest_framework后面
     'user.apps.UserConfig',
+    'configures.apps.ConfiguresConfig',
+    'testcases.apps.TestcasesConfig',
+    'envs.apps.EnvsConfig',
+    'testsuits.apps.TestsuitsConfig',
+    'debugtalks.apps.DebugtalksConfig',
+    'reports.apps.ReportsConfig',
     'django_filters',
     'rest_framework'   #pip install djangprestframwork 安装后需要在此添加
 ]
@@ -208,7 +214,8 @@ LOGGING = {
             'filename': os.path.join(BASE_DIR, "logs/test.log"),  # 日志文件的位置
             'maxBytes': 100 * 1024 * 1024,
             'backupCount': 10,
-            'formatter': 'verbose'
+            'formatter': 'verbose',
+            'encoding': 'utf-8'
         },
     },
     # 定义日志器

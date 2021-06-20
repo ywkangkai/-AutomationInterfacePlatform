@@ -14,20 +14,19 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Interfaces',
+            name='Testsuits',
             fields=[
                 ('create_time', models.DateTimeField(auto_now_add=True, help_text='创建时间', verbose_name='创建时间')),
                 ('update_time', models.DateTimeField(auto_now=True, help_text='更新时间', verbose_name='更新时间')),
                 ('id', models.AutoField(help_text='id主键', primary_key=True, serialize=False, verbose_name='id主键')),
-                ('name', models.CharField(help_text='接口名称', max_length=200, unique=True, verbose_name='接口名称')),
-                ('tester', models.CharField(help_text='测试人员', max_length=50, verbose_name='测试人员')),
-                ('desc', models.CharField(blank=True, help_text='简要描述', max_length=200, null=True, verbose_name='简要描述')),
-                ('project', models.ForeignKey(help_text='所属项目', on_delete=django.db.models.deletion.CASCADE, related_name='interfaces', to='projects.Projects')),
+                ('name', models.CharField(help_text='套件名称', max_length=200, unique=True, verbose_name='套件名称')),
+                ('include', models.TextField(help_text='包含的接口', verbose_name='包含的接口')),
+                ('project', models.ForeignKey(help_text='所属项目', on_delete=django.db.models.deletion.CASCADE, related_name='testsuits', to='projects.Projects')),
             ],
             options={
-                'verbose_name': '接口信息',
-                'verbose_name_plural': '接口信息',
-                'db_table': 'tb_interfaces',
+                'verbose_name': '套件信息',
+                'verbose_name_plural': '套件信息',
+                'db_table': 'tb_testsuits',
             },
         ),
     ]
