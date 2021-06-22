@@ -4,6 +4,7 @@ from rest_framework import validators
 from interfaces.models import Interfaces
 from interfaces.serializers import InterfacesModelSerializer
 from utils.format_time import datetimes_fmt
+from debugtalks.models import DebugTalks
 '''
 自定义调用字段校验，value是前端传入的字段，如在name字段调用此函数，value=name，如果校验失败一定使用
 raise serializers.ValidationError
@@ -125,10 +126,16 @@ class ProjectsModelSerializer(serializers.ModelSerializer):
         #read_only_fields = ('id','desc') #这些字段只输出不输入
         extra_kwargs = {
               'create_time':{
-                  'read_only':False,
+                  'read_only':True,
                   'format': datetimes_fmt(),
               }
         }
+
+    def create(self, validated_data):
+        #业务：在创建项目时需要创建一个空的debugtalk.py文件
+        project = super().create(validated_data)
+        DebugTalks.objects.create(project=project)
+        return project
 
     #添加了email字段，但是该字段不在表中，所以在创建数据时需要先将该字段剔除
     # def create(self, validated_data):
