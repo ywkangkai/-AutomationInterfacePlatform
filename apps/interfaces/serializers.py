@@ -1,15 +1,29 @@
 from rest_framework import serializers
 from interfaces.models import Interfaces
-from rest_framework import validators
 from projects.models import Projects
+from utils.format_time import datetimes_fmt
+
+
+
 class InterfacesModelSerializer(serializers.ModelSerializer):
-    '''
-    子表查父表不用  字段_set，project与project_id两种写法都行，这里主要是为一个查父表的name一个查父表的ID
-    '''
-    prject = serializers.StringRelatedField() #StringRelatedField会返回project表__str__返回的字段   name
-    project_id = serializers.PrimaryKeyRelatedField(write_only=True,queryset=Projects.objects.all()) # project_id其实与prject是一样的性质，都是为了查父表，这里主要是id
+
+    project = serializers.StringRelatedField(label='所属项目id', help_text='所属项目id',read_only=True)
+    project_id = serializers.PrimaryKeyRelatedField(write_only=True, label='所属项目id', help_text='所属项目id',
+                                                    queryset=Projects.objects.all())
 
     class Meta:
         model = Interfaces
-        fields = '__all__'  #fileds类属性来指定模型类中哪些字段需要输入或输出
+        fields = ('id','name','project','project_id','tester','create_time',)
 
+        extra_kwargs = {
+            'create_time': {
+                'read_only': True,
+                'format': datetimes_fmt(),
+            }
+        }
+
+
+    # def create(self, validated_data):
+    #     print(validated_data)
+    #     interface = super().create(validated_data)
+    #     return interface

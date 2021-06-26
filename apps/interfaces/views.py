@@ -1,19 +1,24 @@
-import json
-import random
-import string
-from django.http import HttpResponse, JsonResponse
-from django.views import View
-from django.shortcuts import render
-from django.db import connection
+import logging
 from django.db.models import Q, Count
-from .models import Interfaces
+from interfaces.models import Interfaces
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from .serializers import InterfacesModelSerializer
 
 
+logger = logging.getLogger('log')  #这里的log是setting中189行自己定义的名字
 
-class InterfacesView(View):
 
-    def get(self, request):
-        qs = Interfaces.objects.all()
-        serializer_obj = InterfacesModelSerializer(instance=qs, many=True)
-        return JsonResponse(serializer_obj.data, status=200, safe=False) #加safe=False的原因是，接口表与项目表关联，查询出来的数据存在列表的形式
+
+class InterfacesViewSet(viewsets.ModelViewSet):
+    queryset = Interfaces.objects.all()
+    serializer_class = InterfacesModelSerializer
+
+
+
+
+
+
+
+

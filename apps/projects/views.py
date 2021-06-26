@@ -107,8 +107,16 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     '''
     @action(methods=['get'], detail=False)  # 看url中对应的用法，需要指定什么方法，detail表示是查多个还是查一个数据
     def names(self, request,*args, **kwargs):
+        qs = self.get_queryset()
+        qs = self.filter_queryset(qs)
+        page = self.paginate_queryset(qs)
+        if page is not None:
+            serializer_obj = self.get_serializer(instance=page, many=True)
+            return Response(serializer_obj.data)
+        serializer_obj = self.get_serializer(instance=page,many=True)
+        return Response(serializer_obj.data)
 
-        return self.list(request,*args, **kwargs)
+        #return self.list(request,*args, **kwargs)
 
     @action(detail=True)
     def interfaces(self,request,*args,**kwargs):

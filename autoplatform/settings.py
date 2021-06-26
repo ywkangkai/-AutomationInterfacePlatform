@@ -153,24 +153,44 @@ STATIC_URL = '/static/'
 
 
 REST_FRAMEWORK = {
-    'NON_FIELD_ERRORS_KEY':'errors',
-    #指定全局的过滤引擎
-    'DEFAULT_FILTER_BACKENDS':['django_filters.rest_framework.backends.DjangoFilterBackend'],
-    #指定分页引擎
-   # 'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
+    'NON_FIELD_ERRORS_KEY': 'errors',
+    # a.可以修改默认的渲染类（处理返回的数据形式）
+    'DEFAULT_RENDERER_CLASSES': [
+        # b.列表中的元素是有优先级的，第一个元素优先级最高
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.backends.DjangoFilterBackend',
+        'rest_framework.filters.OrderingFilter',
+    ],
+    # a.需要指定分页引擎，可以使用默认的PageNumberPagination分页引擎类
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS': 'utils.pagination.MyPagination',
+    # b.必须指定每一页的数据条数
+    'PAGE_SIZE': 3,
 
-    'DEFAULT_PAGINATION_CLASS':'utils.pagination.MyPagination',
-    #必须指定每页每页的数据条数
-    #'PAGE_SIZE':3,
+    # 指定用于支持coreapi的Schema
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+
     # DEFAULT_AUTHENTICATION_CLASSES指定默认的认证类（认证方式）
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 指定使用JWT token认证方式
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         # 会话认证
         'rest_framework.authentication.SessionAuthentication',
         # 基本认证（用户名和密码认证）
         'rest_framework.authentication.BasicAuthentication',
-        #指定使用JWT token认证
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication'
+    ],
+    # DEFAULT_PERMISSION_CLASSES指定认证之后，能获取到的权限
+    'DEFAULT_PERMISSION_CLASSES': [
+        # AllowAny，不需要登陆就有任意权限
+        # 'rest_framework.permissions.AllowAny',
+        # IsAuthenticated只要登录之后，就具备任意权限
+        'rest_framework.permissions.IsAuthenticated',
+        # IsAdminUser指定只有为管理员用户才用任意权限
+        # IsAuthenticatedOrReadOnly指定如果没登录，只能获取数据，如果登录成功，就具备任意权限
+        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ],
 }
 

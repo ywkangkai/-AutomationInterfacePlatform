@@ -1,6 +1,4 @@
 from django.urls import path, re_path
-
-# from projects.views import
 from projects import views
 from rest_framework.routers import DefaultRouter,SimpleRouter
 

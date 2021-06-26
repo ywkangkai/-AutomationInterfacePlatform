@@ -4,7 +4,10 @@ from interfaces import views
 
 
 urlpatterns = [
-    path('interfaces/', views.InterfacesView.as_view()),
-    #path('projects/<int:pk>/', views.ProjectDetailView.as_view()),
+    path('interfaces/', views.InterfacesViewSet.as_view({
+        'post': 'create',
+        'get': 'list'
+    })),
+
 
 ]
