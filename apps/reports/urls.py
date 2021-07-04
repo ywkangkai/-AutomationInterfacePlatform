@@ -1,15 +1,16 @@
+
 from django.urls import path, re_path
 
-from reports import views
+from rest_framework.routers import DefaultRouter, SimpleRouter
 
+from . import views
+
+
+# 定义路由对象
+router = SimpleRouter()
+router.register(r'reports', views.ReportsViewSet)
 
 urlpatterns = [
-    path('reports/', views.ReportsViewSet.as_view({
-        'get': 'list'
-    })),
-    path('testsuits/<int:pk>/', views.ReportsViewSet.as_view({
-        'put': 'update',
-        'get':'retrieve'
-    })),
 
 ]
+urlpatterns += router.urls

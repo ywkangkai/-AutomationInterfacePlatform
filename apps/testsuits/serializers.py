@@ -5,7 +5,7 @@ from rest_framework import validators
 
 from .models import Testsuits
 from projects.models import Projects
-from utils.format_time import datetimes_fmt
+from utils.common import datetime_fmt
 from interfaces.models import Interfaces
 
 
@@ -37,11 +37,11 @@ class TestsuitsModelSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'create_time': {
                 'read_only': True,
-                'format': datetimes_fmt()
+                'format': datetime_fmt()
             },
             'update_time': {
                 'read_only': True,
-                'format': datetimes_fmt()
+                'format': datetime_fmt()
             },
             'include': {
                 # 'write_only': True,
@@ -57,6 +57,7 @@ class TestsuitsModelSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
-        project = validated_data.pop('project_id')
-        validated_data['project'] = project
-        return super().update(instance, validated_data)
+        if 'project_id' in validated_data:
+            project = validated_data.pop('project_id')
+            validated_data['project'] = project
+            return super().update(instance, validated_data)

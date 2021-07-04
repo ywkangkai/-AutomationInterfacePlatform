@@ -1,20 +1,16 @@
+
 from django.urls import path, re_path
 
-from envs import views
+from rest_framework.routers import DefaultRouter, SimpleRouter
 
+from . import views
+
+
+# 定义路由对象
+router = SimpleRouter()
+router.register(r'envs', views.EnvsViewSet)
 
 urlpatterns = [
-    path('envs/', views.EnvsViewSet.as_view({
-        'get': 'list',
-        'post':'create'
-    })),
-    path('envs/<int:pk>/', views.EnvsViewSet.as_view({
-        'get': 'retrieve',
-        'put': 'update',
-        'delete': 'destroy'
-    })),
-    path('envs/names/', views.EnvsViewSet.as_view({
-        'get': 'names',
-    })),
 
 ]
+urlpatterns += router.urls

@@ -1,24 +1,28 @@
+
 from rest_framework import serializers
-from envs.models import Envs
-from utils.format_time import datetimes_fmt
+from rest_framework import validators
+
+from .models import Envs
+from utils import common
 
 
 class EnvsModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Envs
-        exclude = ('update_time',)
+        exclude = ('update_time', )
+
         extra_kwargs = {
             'create_time': {
+                # 'read_only': False,
                 'read_only': True,
-                'format': datetimes_fmt(),
-            }
+                'format': common.datetime_fmt(),
+            },
+
         }
 
 
-
 class EnvsNamesSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Envs
-        fields = ('id','name')
+        fields = ('id', 'name')

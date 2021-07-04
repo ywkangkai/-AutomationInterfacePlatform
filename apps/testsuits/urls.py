@@ -1,16 +1,14 @@
+
 from django.urls import path, re_path
 
-from interfaces import views
+from rest_framework.routers import DefaultRouter, SimpleRouter
+
+from . import views
 
 
-urlpatterns = [
-    path('testsuits/', views.InterfacesViewSet.as_view({
-        'get': 'list',
-        'post':'create'
-    })),
-    path('testsuits/<int:pk>/', views.InterfacesViewSet.as_view({
-        'put': 'update',
-        'get':'retrieve'
-    })),
+# 定义路由对象
+router = SimpleRouter()
+router.register(r'testsuits', views.TestsuitsViewSet)
 
-]
+urlpatterns = []
+urlpatterns += router.urls

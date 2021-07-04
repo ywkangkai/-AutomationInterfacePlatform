@@ -16,6 +16,7 @@ from . import serializers
 from testcases.models import Testcases
 from configures.models import Configures
 from envs.models import Envs
+from utils import common
 
 
 class InterfacesViewSet(ModelViewSet):
@@ -52,6 +53,7 @@ class InterfacesViewSet(ModelViewSet):
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
         results = response.data['results']
+        print(results)
         data_list = []
         for item in results:
             interface_id = item['id']

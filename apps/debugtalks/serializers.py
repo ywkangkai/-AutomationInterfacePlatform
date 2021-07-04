@@ -1,12 +1,21 @@
 from rest_framework import serializers
-from interfaces.models import Interfaces
-from rest_framework import validators
-from debugtalks.models import DebugTalks
+
+from .models import DebugTalks
 
 
-class DebugTalksModelSerializer(serializers.ModelSerializer):
+class DebugTalksSerializer(serializers.ModelSerializer):
+    """
+    DebugTalks序列化器
+    """
+    project = serializers.StringRelatedField(help_text='项目名称')
 
     class Meta:
         model = DebugTalks
-        fields = ('debugtalk','project')
+        exclude = ('create_time', 'update_time')
+        read_only_fields = ('name', 'project')
 
+        extra_kwargs = {
+            'debugtalk': {
+                'write_only': True
+            }
+        }

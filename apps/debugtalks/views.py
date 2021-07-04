@@ -1,26 +1,35 @@
-import logging
-from django.db.models import Q, Count
-from interfaces.models import Interfaces
-from rest_framework import viewsets
-from rest_framework.decorators import action
+from rest_framework.viewsets import GenericViewSet
+from rest_framework import mixins
+from rest_framework import permissions
 from rest_framework.response import Response
-from .serializers import DebugTalksModelSerializer
+
+from .models import DebugTalks
+from .serializers import DebugTalksSerializer
 
 
-logger = logging.getLogger('log')  #这里的log是setting中189行自己定义的名字
+class DebugTalksViewSet(mixins.ListModelMixin,
+                        mixins.UpdateModelMixin,
+                        mixins.RetrieveModelMixin,
+                        GenericViewSet):
+    """
+    list:
+    返回debugtalk（多个）列表数据
 
+    update:
+    更新（全）debugtalk
 
+    partial_update:
+    更新（部分）debugtalk
+    """
+    queryset = DebugTalks.objects.all()
+    serializer_class = DebugTalksSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    ordering_fields = ('id', 'project_id')
 
-class InterfacesViewSet(viewsets.ModelViewSet):
-    queryset = Interfaces.objects.all()
-    serializer_class = DebugTalksModelSerializer
-
-
-
-
-
-
-
-
-
-
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        data_dict = {
+            "id": instance.id,
+            "debugtalk": instance.debugtalk
+        }
+        return Response(data_dict)
