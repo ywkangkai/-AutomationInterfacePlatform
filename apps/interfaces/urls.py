@@ -8,6 +8,9 @@ urlpatterns = [
         'post': 'create',
         'get': 'list'
     })),
-
-
+    path('interfaces/<int:pk>', views.InterfacesViewSet.as_view({
+        'get': 'retrieve',
+        'put': 'update',
+        'delete': 'destroy'
+    })),
 ]

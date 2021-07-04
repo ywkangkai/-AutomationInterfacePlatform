@@ -5,7 +5,8 @@ from interfaces import views
 
 urlpatterns = [
     path('testsuits/', views.InterfacesViewSet.as_view({
-        'get': 'list'
+        'get': 'list',
+        'post':'create'
     })),
     path('testsuits/<int:pk>/', views.InterfacesViewSet.as_view({
         'put': 'update',
