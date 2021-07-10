@@ -39,11 +39,13 @@ class TestcasesModelSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
+        print('xxxxxxxxxxxxxxxxxx')
         iid = validated_data.pop('interface').get('iid')
         validated_data['interface_id'] = iid
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
+        print('xxxxxxxxxxxxxxxxxxxxxxxxx')
         iid = validated_data.pop('interface').get('iid')
         validated_data['interface_id'] = iid
         return super().update(instance, validated_data)

@@ -88,7 +88,7 @@ class InterfacesViewSet(ModelViewSet):
         return response
 
     @action(methods=['get'], detail=True)
-    def configures(self, request, *args, **kwargs):
+    def configs(self, request, *args, **kwargs):
         """
         Returns a list of all the testcases names by interface id
         """
@@ -97,7 +97,7 @@ class InterfacesViewSet(ModelViewSet):
         # for obj in configures_objs:
         #     one_list.append({
         #         'id': obj.id,
-        #         'name': obj.name
+        #         'name': obj.names
         #     })
         # return Response(data=one_list)
 
@@ -112,7 +112,7 @@ class InterfacesViewSet(ModelViewSet):
         """
         if self.action == "testcases":
             return serializers.TestcasesByInterfaceIdModelSerializer
-        elif self.action == "configures":
+        elif self.action == "configs":
             return serializers.ConfiguresByInterfaceIdModelSerializer
         else:
             return self.serializer_class
