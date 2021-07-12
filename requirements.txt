@@ -20,3 +20,7 @@ mysqlclient==1.4.6
 
 mysqlclient-deps==0.0.2
 
+PyYAML==5.3.1
+
+httprunner==1.5.8
+

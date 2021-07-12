@@ -165,21 +165,10 @@
 
 
 # -*- coding: utf-8 -*-
-"""
--------------------------------------------------
-  @Time : 2020/7/1 20:14
-  @Auth : 可优
-  @File : serializers.py
-  @IDE  : PyCharm
-  @Motto: ABC(Always Be Coding)
-  @Email: keyou100@qq.com
-  @Company: 湖南省零檬信息技术有限公司
-  @Copyright: 柠檬班
--------------------------------------------------
-"""
+
 from rest_framework import serializers
 from rest_framework import validators
-
+from utils import common,validates
 from .models import Projects
 from interfaces.models import Interfaces
 from interfaces.serializers import InterfacesModelSerializer
@@ -237,3 +226,12 @@ class InterfacesByProjectIdModelSerializer1(serializers.ModelSerializer):
     class Meta:
         model = Interfaces
         fields = ('id', 'name')
+
+
+class ProjectsRunSerializer(serializers.ModelSerializer):
+    env_id = serializers.IntegerField(label='环境变量ID', help_text='环境变量ID',
+                                      write_only=True, validators=[validates.is_exised_env_id])
+
+    class Meta:
+        model = Projects
+        fields = ('id', 'env_id')

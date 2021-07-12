@@ -10,7 +10,8 @@ from interfaces.models import Interfaces
 
 
 def validate_include(value):
-    obj = re.match(r'^\[\d+(,\d+)*\]$', value)
+    print(type(value))
+    obj = re.match(r'^\[\d+(, *\d+)*\]$', value)
     if obj is None:
         raise serializers.ValidationError('参数格式有误')
     else:
@@ -50,6 +51,7 @@ class TestsuitsModelSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
+        print(validated_data)
         project = validated_data.pop('project_id')
         validated_data['project'] = project
         # testsuit = Testsuits.objects.create(**validated_data)
