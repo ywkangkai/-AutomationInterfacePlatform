@@ -57,3 +57,17 @@ g.怎么去处理日志、配置、测试报告？
 
 httprunner：
     unittest、yaml、logging、自定义函数、locust
+
+
+整个项目开发完成之后，会出现如下问题：
+1.只能在本地或者局域网中访问平台
+    a.需要部署到服务器中，绝大多数应用都是在Linux服务器上部署的
+
+2.如果后端有bug，会自动将后端的敏感信息显示在前台，会有安全风险
+    a.可以将全局配置文件settings.py中的 DEBUG = False
+    b.后端的敏感信息不会在前台显示
+    c.runserver不在提供静态文件服务，找不到静态文件（css、js、html）等
+    d.除了需要使用静态文件服务器（nginx、Apache）以外，还需要应用服务器（gunicorn、uwsgi服务器）去处理动态资源
+
+3.当前使用的是runserver服务器（开发阶段服务器，主要用于调试），并发性能非常差，不能满足线上业务需要
+    python manage.py runnerserver

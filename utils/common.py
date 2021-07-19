@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+
 import json
 import locale
 import os
@@ -21,7 +21,12 @@ def datetime_fmt():
 
 
 def create_report(runner, report_name=None):
-
+    """
+    创建测试报告
+    :param runner:
+    :param report_name:
+    :return:
+    """
     time_stamp = int(runner.summary["time"]["start_at"])
     start_datetime = datetime.fromtimestamp(time_stamp).strftime('%Y-%m-%d %H:%M:%S')
     runner.summary['time']['start_datetime'] = start_datetime
@@ -33,12 +38,12 @@ def create_report(runner, report_name=None):
 
     for item in runner.summary['details']:
         # 对时间戳进行处理
-        # try:
-        #     time_stamp = int(item['time']['start_at'])
-        #     #detail['time']['start_at'] = datetime.fromtimestamp(time_stamp).strftime('%Y-%m-%d %H:%M:%S')
-        # except Exception:
-        #     pass
-        # 对时间戳进行处理
+        try:
+            time_stamp = int(item['time']['start_at'])
+            detail['time']['start_at'] = datetime.fromtimestamp(time_stamp).strftime('%Y-%m-%d %H:%M:%S')
+        except Exception:
+            pass
+
         try:
             for record in item['records']:
                 # 对时间戳进行处理
@@ -136,8 +141,11 @@ def generate_testcase_file(instance, env, testcase_dir_path):
 
     # 把当前需要执行的用例追加到testcase_list最后
     testcase_list.append(request)
+    # with open(os.path.join(testcase_dir_path, instance.name + '.yaml'), 'w', encoding='utf-8') as f:
+    #     yaml.dump(testcase_list, f, all_unicode=True)
 
     with open(os.path.join(testcase_dir_path, instance.name + '.yaml'), 'w', encoding='utf-8') as f:
+        print(testcase_list)
         yaml.dump(testcase_list, f, allow_unicode=True)
 
 

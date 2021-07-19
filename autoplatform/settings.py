@@ -28,7 +28,7 @@ sys.path.append(os.path.join(BASE_DIR, 'apps'))
 SECRET_KEY = 's+fn4*kowe8g_6$k9$3j2n(htf!w@dahdc!-iw4xi9xub@*411'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False  # 此处设置为false，当路径输入错误时，后端的敏感信息不会打印出来，并且不在提供静态文件服务，无法找到css与js文件
 
 # 可以使用哪些ip或者域名，来访问系统
 # 默认为空，可以使用127.0.0.1或者localhost
@@ -298,3 +298,4 @@ JWT_AUTH = {
 # django.conf.setting
 REPORT_DIR = os.path.join(BASE_DIR, 'reports')
 SUITES_DIR = os.path.join(BASE_DIR, 'suites')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')  #  收集静态文件 执行命令python manage.py collectstatic， 会生成一个static的文件

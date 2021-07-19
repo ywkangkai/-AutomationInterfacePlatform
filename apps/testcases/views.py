@@ -135,7 +135,8 @@ class TestcasesViewSet(viewsets.ModelViewSet):
         generate_testcase_file(instance, env, testcase_dir_path)
 
         # 运行用例（生成报告）
-        run_testcase(instance, testcase_dir_path)
+        result = run_testcase(instance, testcase_dir_path)
+        return result
         # return common.run_testcase(instance, testcase_dir_path)
 
     def get_serializer_class(self):
