@@ -8,18 +8,19 @@ from rest_framework.decorators import action
 from django.conf import settings
 from django.utils.encoding import escape_uri_path
 from utils.download_file import get_file_content
-
-
-
+from rest_framework.filters import OrderingFilter #指定排序引擎
+from django_filters.rest_framework import DjangoFilterBackend
 
 class ReportsViewSet(viewsets.ModelViewSet):
     queryset = Reports.objects.all()
     serializer_class = ReportsModelSerializer
-
+    filter_backends = [DjangoFilterBackend,OrderingFilter]
+    filterset_fields = ['name','id']
+    #ordering_fields = ['create_time']
 
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-
+        queryset = Reports.objects.all().order_by('-create_time')
+        queryset = self.filter_queryset(queryset)
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
