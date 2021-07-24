@@ -53,7 +53,6 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     # 1、绝大部分不需要修改，只有少量要修改的，直接对父类中的action进行拓展
     # 2、绝大部分都需要修改的话，那么直接自定义即可
     def list(self, request, *args, **kwargs):
-        # print(1/0)
         response = super().list(request, *args, **kwargs)
         results = response.data['results']
         data_list = []

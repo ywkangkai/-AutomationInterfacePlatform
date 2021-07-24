@@ -3,9 +3,6 @@ from utils.format_time import datetimes_fmt
 from reports.models import Reports
 import re
 
-
-
-
 class ReportsModelSerializer(serializers.ModelSerializer):
 
     class Meta:

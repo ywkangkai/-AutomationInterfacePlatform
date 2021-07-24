@@ -9,7 +9,7 @@ class Testcases(BaseModel):
     interface = models.ForeignKey('interfaces.Interfaces', on_delete=models.CASCADE, related_name='testcases',
                                   help_text='所属接口')
     # include = models.ForeignKey('', on_delete=models.SET_NULL, null=True, related_name='testcases')
-    include = models.TextField('前置', null=True, help_text='用例执行前置顺序')
+    include = models.TextField('前置', null=True, help_text='用例执行前置顺序')  # 加 null=True是有因为有些用例不需要前置
     author = models.CharField('编写人员', max_length=50, help_text='编写人员')
     request = models.TextField('请求信息', help_text='请求信息')
 
