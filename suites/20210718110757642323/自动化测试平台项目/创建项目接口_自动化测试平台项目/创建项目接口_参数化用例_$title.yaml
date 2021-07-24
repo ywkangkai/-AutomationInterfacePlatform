@@ -1,0 +1,44 @@
+- config:
+    name: 创建项目接口_参数化用例_$title
+    request:
+      base_url: http://localhost:8000
+- test:
+    extract:
+    - token: content.token
+    name: 登录接口_正向用例
+    request:
+      json:
+        password: $password
+        username: $username
+      method: POST
+      url: /user/login/
+    validate:
+    - check: status_code
+      comparator: equals
+      expected: 200
+    variables:
+    - username: keyou1
+    - password: '123456'
+- test:
+    name: 创建项目接口_参数化用例_$title
+    parameters:
+    - title-name-leader-tester-programmer-publish_app-desc-status_code: ${create_project()}
+    request:
+      headers:
+        Accept: application/json
+        Authorization: JWT $token
+        Content-Type: application/json
+        User-Agent: Mozilla/5.0 Lemon Little Girl
+      json:
+        desc: $desc
+        leader: $leader
+        name: $name
+        programmer: $programmer
+        publish_app: $publish_app
+        tester: $tester
+      method: POST
+      url: /projects/
+    validate:
+    - check: status_code
+      comparator: equals
+      expected: $status_code

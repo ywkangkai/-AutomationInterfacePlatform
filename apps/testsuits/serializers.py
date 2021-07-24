@@ -1,8 +1,7 @@
 import re
 
 from rest_framework import serializers
-from rest_framework import validators
-
+from utils import validates
 from .models import Testsuits
 from projects.models import Projects
 from utils.common import datetime_fmt
@@ -63,3 +62,16 @@ class TestsuitsModelSerializer(serializers.ModelSerializer):
             project = validated_data.pop('project_id')
             validated_data['project'] = project
             return super().update(instance, validated_data)
+
+
+class TestsuitsRunSerializer(serializers.ModelSerializer):
+    """
+    通过套件来运行测试用例序列化器
+    """
+    env_id = serializers.IntegerField(write_only=True,
+                                      help_text='环境变量ID',
+                                      validators=[validates.is_exised_env_id])
+
+    class Meta:
+        model = Testsuits
+        fields = ('id', 'env_id')

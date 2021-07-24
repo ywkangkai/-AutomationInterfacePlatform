@@ -5,7 +5,7 @@ from projects.models import Projects
 from testcases.models import Testcases
 from configures.models import Configures
 from utils.format_time import datetimes_fmt
-
+from utils import validates
 
 class InterfacesModelSerializer(serializers.ModelSerializer):
     project = serializers.StringRelatedField(label='所属项目名称', help_text='所属项目名称')
@@ -69,3 +69,15 @@ class ConfiguresByInterfaceIdModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Interfaces
         fields = ('configures', )
+
+class InterfaceRunSerializer(serializers.ModelSerializer):
+    """
+    通过接口来运行测试用例序列化器
+    """
+    env_id = serializers.IntegerField(write_only=True,
+                                      help_text='环境变量ID',
+                                      validators=[validates.is_exised_env_id])
+
+    class Meta:
+        model = Interfaces
+        fields = ('id', 'env_id')

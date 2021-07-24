@@ -59,7 +59,7 @@ INSTALLED_APPS = [
     'testsuits',
     'debugtalks',
     'reports',
-
+    'summary',
     # 可以将某个目录（包）标记为Source Root，那么Pycharm会有智能提示
     # 不是Python的特性
     # 'apps.projects',

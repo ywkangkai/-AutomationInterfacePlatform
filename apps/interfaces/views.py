@@ -10,8 +10,8 @@ from rest_framework import status
 
 from .models import Interfaces
 # from .serializers import InterfacesModelSerializer, \
-#     TestcasesByInterfaceIdModelSerializer, \
-#     ConfiguresByInterfaceIdModelSerializer
+# #     TestcasesByInterfaceIdModelSerializer, \
+# #     ConfiguresByInterfaceIdModelSerializer
 from . import serializers
 from testcases.models import Testcases
 from configures.models import Configures
@@ -53,7 +53,6 @@ class InterfacesViewSet(ModelViewSet):
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
         results = response.data['results']
-        print(results)
         data_list = []
         for item in results:
             interface_id = item['id']
@@ -105,6 +104,32 @@ class InterfacesViewSet(ModelViewSet):
         response.data = response.data['configures']
         return response
 
+    @action(methods=['post'], detail=True)
+    def run(self, request, *args, **kwargs):
+        # 取出并构造参数
+        instance = self.get_object()
+        response = super().create(request, *args, **kwargs)
+        env_id = response.data.serializer.validated_data.get('env_id')
+        testcase_dir_path = os.path.join(settings.SUITES_DIR, datetime.strftime(datetime.now(), '%Y%m%d%H%M%S%f'))
+        # 创建一个以时间戳命名的路径
+        os.mkdir(testcase_dir_path)
+        env = Envs.objects.filter(id=env_id).first()
+
+        testcase_objs = Testcases.objects.filter(interface=instance)
+        if not testcase_objs.exists():  # 如果此接口下没有用例, 则无法运行
+            data = {
+                'ret': False,
+                'msg': '此接口下无用例, 无法运行'
+            }
+            return Response(data, status=400)
+
+        for one_obj in testcase_objs:
+            common.generate_testcase_file(one_obj, env, testcase_dir_path)
+
+        # 运行用例
+        return common.run_testcase(instance, testcase_dir_path)
+
+
     def get_serializer_class(self):
         """
         不同的action选择不同的序列化器
@@ -114,5 +139,13 @@ class InterfacesViewSet(ModelViewSet):
             return serializers.TestcasesByInterfaceIdModelSerializer
         elif self.action == "configs":
             return serializers.ConfiguresByInterfaceIdModelSerializer
+        elif self.action == "run":
+            return serializers.InterfaceRunSerializer
         else:
             return self.serializer_class
+
+    def perform_create(self, serializer):
+        if self.action == 'run':
+            pass
+        else:
+            serializer.save()

@@ -1,0 +1,49 @@
+- config:
+    name: 创建项目接口_正向用例
+    request:
+      base_url: http://localhost:8000
+- test:
+    extract:
+    - token: content.token
+    name: 登录接口_正向用例
+    request:
+      json:
+        password: $password
+        username: $username
+      method: POST
+      url: /user/login/
+    validate:
+    - check: status_code
+      comparator: equals
+      expected: 200
+    variables:
+    - username: keyou1
+    - password: '123456'
+- test:
+    name: 创建项目接口_正向用例
+    request:
+      headers:
+        Accept: application/json
+        Authorization: JWT $token
+        Content-Type: application/json
+        User-Agent: Mozilla/5.0 Lemon Little Girl
+      json:
+        desc: $desc
+        leader: $leader
+        name: $name
+        programmer: $programmer
+        publish_app: $publish_app
+        tester: $tester
+      method: POST
+      url: /projects/
+    validate:
+    - check: status_code
+      comparator: equals
+      expected: 201
+    variables:
+    - name: ${get_project_name()}
+    - leader: 可优
+    - tester: 柠檬小姐姐
+    - programmer: 优优
+    - publish_app: 国产大飞机C919研制应用
+    - desc: 此项目会提升民族自信心

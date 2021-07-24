@@ -1,0 +1,24 @@
+- config:
+    name: 登录接口配置_自动化测试平台项目
+    request:
+      base_url: http://localhost:8000
+      headers:
+        Accept: application/json
+        User-Agent: Mozilla/5.0 KeYou
+- test:
+    name: 登录接口_参数化用例_$title
+    parameters:
+    - title-username-password-status_code-contain_msg: ${get_accounts()}
+    request:
+      json:
+        password: $password
+        username: $username
+      method: POST
+      url: /user/login/
+    validate:
+    - check: status_code
+      comparator: equals
+      expected: $status_code
+    - check: content
+      comparator: contains
+      expected: $contain_msg
