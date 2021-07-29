@@ -8,10 +8,10 @@ from utils.format_time import datetimes_fmt
 from utils import validates
 
 class InterfacesModelSerializer(serializers.ModelSerializer):
-    project = serializers.StringRelatedField(label='所属项目名称', help_text='所属项目名称')
+    project = serializers.StringRelatedField(label='所属项目名称', help_text='所属项目名称')   # StringRelatedField会返回model中的__str__下的值
     project_id = serializers.PrimaryKeyRelatedField(queryset=Projects.objects.all(),
                                                     label='项目id', help_text='项目id',
-                                                    )
+                                                    )  #  project_id 创建一个接口时需要挂到某一个项目下
 
     class Meta:
         model = Interfaces

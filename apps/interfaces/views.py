@@ -20,31 +20,7 @@ from utils import common
 
 
 class InterfacesViewSet(ModelViewSet):
-    """
-    list:
-    返回接口（多个）列表数据
 
-    create:
-    创建接口
-
-    retrieve:
-    返回接口（单个）详情数据
-
-    update:
-    更新（全）接口
-
-    partial_update:
-    更新（部分）接口
-
-    destroy:
-    删除接口
-
-    testcases:
-    返回某个接口的所有用例信息（ID和名称）
-
-    configures:
-    返回某个接口的所有配置信息（ID和名称）
-    """
     queryset = Interfaces.objects.all()
     serializer_class = serializers.InterfacesModelSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -58,7 +34,6 @@ class InterfacesViewSet(ModelViewSet):
             interface_id = item['id']
             # 计算用例数
             testcases_count = Testcases.objects.filter(interface_id=interface_id).count()
-
             # 计算配置数
             config_count = Configures.objects.filter(interface_id=interface_id).count()
 
